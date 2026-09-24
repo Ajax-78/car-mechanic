@@ -1,6 +1,7 @@
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .services.response import diagnose_with_ai
 import json
 
 
@@ -19,6 +20,7 @@ def chat(request):
         data = json.loads(request.body)
 
         message = data.get("message", "")
+        conversation = data.get("history", [])
         conversation_id = data.get("conversation_id")
 
         if not message:
@@ -30,14 +32,20 @@ def chat(request):
                 status=400
             )
 
+        # Call Gemini
+        ai_reply = diagnose_with_ai(
+            conversation=conversation,
+            user_message=message
+        )
+
         return JsonResponse(
             {
                 "success": True,
-                "message": "Chat endpoint working",
+                "message": "Chat response generated successfully",
                 "data": {
                     "conversation_id": conversation_id,
                     "user_message": message,
-                    "reply": "I am your AI car mechanic. Please describe the issue with your car."
+                    "reply": ai_reply
                 }
             },
             status=200
@@ -52,7 +60,17 @@ def chat(request):
             status=400
         )
 
+    except Exception as error:
+        print("CHAT ERROR:", error)
 
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Failed to generate AI response",
+                "error": str(error)
+            },
+            status=500
+        )
 @csrf_exempt
 def upload_media(request):
     if request.method != "POST":
