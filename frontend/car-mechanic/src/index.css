@@ -1,0 +1,968 @@
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --background: #f5f7fb;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --assistant-bg: #f1f5f9;
+  --user-bg: #2563eb;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: var(--background);
+  color: var(--text);
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  height: 72px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--primary);
+}
+
+.logo h1 {
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.logo span {
+  display: block;
+  margin-top: 2px;
+
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.online {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  color: #374151;
+}
+
+.online > span {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+  background: var(--success);
+
+  box-shadow: 0 0 0 4px #dcfce7;
+}
+
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.layout {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 300px;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  min-height: 0;
+}
+
+
+/* =========================
+   COMMON PANEL
+========================= */
+
+.history,
+.chat,
+.diagnosis {
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+.history {
+  padding: 20px;
+}
+
+.history h3,
+.diagnosis h3 {
+  font-size: 15px;
+  font-weight: 700;
+
+  margin-bottom: 12px;
+}
+
+.history p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: calc(100vh - 104px);
+}
+
+
+/* =========================
+   CHAT HEADER
+========================= */
+
+.chat-header {
+  min-height: 68px;
+
+  padding: 14px 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.mechanic-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+  color: var(--primary);
+
+  flex-shrink: 0;
+}
+
+.chat-header strong {
+  display: block;
+
+  font-size: 14px;
+}
+
+.chat-header small {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 12px;
+  color: var(--muted);
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+.messages {
+  flex: 1;
+
+  padding: 20px;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  min-height: 300px;
+}
+
+.message-row {
+  display: flex;
+
+  width: 100%;
+}
+
+.message-row.user {
+  justify-content: flex-end;
+}
+
+.message-row.assistant {
+  justify-content: flex-start;
+}
+
+.message {
+  max-width: min(75%, 600px);
+
+  padding: 11px 14px;
+
+  border-radius: 14px;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+.message-row.assistant .message {
+  background: var(--assistant-bg);
+  color: #374151;
+
+  border-bottom-left-radius: 4px;
+}
+
+.message-row.user .message {
+  background: var(--user-bg);
+  color: white;
+
+  border-bottom-right-radius: 4px;
+}
+
+
+/* =========================
+   COMPOSER
+========================= */
+
+.composer {
+  padding: 12px 16px 16px;
+
+  border-top: 1px solid var(--border);
+
+  background: var(--surface);
+}
+
+.file {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 100%;
+
+  margin-bottom: 8px;
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
+  background: #eff6ff;
+  color: #1d4ed8;
+
+  font-size: 12px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-row > input[type="text"],
+.input-row > input:not([type]) {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 42px;
+
+  padding: 0 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  background: #fafafa;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+/* Your main input has no type attribute */
+.input-row > input:not([type]) {
+  flex: 1;
+}
+
+.input-row > input:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  background: white;
+}
+
+
+/* =========================
+   ICON BUTTON
+========================= */
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: white;
+  color: #6b7280;
+
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.icon-button:hover {
+  background: #f3f4f6;
+  color: var(--primary);
+
+  border-color: #bfdbfe;
+}
+
+.icon-button input {
+  display: none;
+}
+
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+.send-button {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 9px;
+
+  background: var(--primary);
+  color: white;
+
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.send-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+
+/* =========================
+   UPLOAD TYPES
+========================= */
+
+.upload-types {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-top: 9px;
+
+  font-size: 11px;
+
+  color: var(--muted);
+}
+
+
+/* =========================
+   DIAGNOSIS
+========================= */
+
+.diagnosis {
+  padding: 20px;
+}
+
+.empty-diagnosis {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-diagnosis svg {
+  color: #94a3b8;
+
+  margin-bottom: 14px;
+}
+
+.empty-diagnosis h4 {
+  font-size: 15px;
+
+  margin-bottom: 7px;
+}
+
+.empty-diagnosis p {
+  max-width: 240px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.6;
+
+  margin-bottom: 18px;
+}
+
+.empty-diagnosis button,
+.diagnosis-result button {
+  width: 100%;
+
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: background 0.2s;
+}
+
+.empty-diagnosis button:hover:not(:disabled),
+.diagnosis-result button:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+
+/* =========================
+   DIAGNOSIS RESULT
+========================= */
+
+.diagnosis-result {
+  padding-top: 8px;
+}
+
+.severity {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #fef3c7;
+  color: #92400e;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  margin-bottom: 12px;
+}
+
+.diagnosis-result h4 {
+  font-size: 18px;
+  line-height: 1.35;
+
+  margin-bottom: 10px;
+}
+
+.diagnosis-result > p {
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.6;
+
+  margin-bottom: 18px;
+}
+
+.service {
+  padding: 13px;
+
+  margin-bottom: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: #f8fafc;
+}
+
+.service strong {
+  display: block;
+
+  font-size: 12px;
+
+  margin-bottom: 5px;
+}
+
+.service span {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+
+  backdrop-filter: blur(3px);
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+
+  max-height: calc(100vh - 40px);
+
+  overflow-y: auto;
+
+  padding: 24px;
+
+  border-radius: 16px;
+
+  background: white;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+  font-size: 20px;
+
+  margin-bottom: 20px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.modal input,
+.modal textarea {
+  width: 100%;
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  padding: 11px 12px;
+
+  background: #fafafa;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.modal input {
+  height: 43px;
+}
+
+.modal textarea {
+  min-height: 90px;
+
+  resize: vertical;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+  border-color: var(--primary);
+
+  background: white;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.modal button {
+  min-height: 43px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: var(--primary);
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modal button:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.modal button[type="button"] {
+  background: #f1f5f9;
+
+  color: #374151;
+}
+
+.modal button[type="button"]:hover {
+  background: #e5e7eb;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.messages::-webkit-scrollbar,
+.modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages::-webkit-scrollbar-thumb,
+.modal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+
+  border-radius: 10px;
+}
+
+.messages::-webkit-scrollbar-track,
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 190px minmax(0, 1fr) 260px;
+  }
+
+  .message {
+    max-width: 80%;
+  }
+}
+
+
+/* =========================
+   SMALL TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr 280px;
+  }
+
+  .history {
+    display: none;
+  }
+
+  .chat {
+    min-height: calc(100vh - 104px);
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+  .header {
+    height: 64px;
+
+    padding: 0 16px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .online {
+    font-size: 12px;
+  }
+
+  .online > span {
+    width: 7px;
+    height: 7px;
+
+    box-shadow: 0 0 0 3px #dcfce7;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
+
+    gap: 10px;
+  }
+
+  .chat {
+    order: 1;
+
+    min-height: calc(100vh - 84px);
+
+    border-radius: 12px;
+  }
+
+  .diagnosis {
+    order: 2;
+  }
+
+  .diagnosis {
+    min-height: auto;
+  }
+
+  .empty-diagnosis {
+    min-height: 220px;
+  }
+
+  .messages {
+    padding: 15px;
+
+    min-height: 250px;
+  }
+
+  .message {
+    max-width: 88%;
+
+    font-size: 13px;
+  }
+
+  .composer {
+    padding: 10px;
+  }
+
+  .upload-types {
+    gap: 10px;
+
+    font-size: 10px;
+  }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 12px;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  .logo h1 {
+    font-size: 16px;
+  }
+
+  .logo span {
+    font-size: 10px;
+  }
+
+  .online {
+    font-size: 0;
+  }
+
+  .online > span {
+    width: 9px;
+    height: 9px;
+  }
+
+  .chat-header {
+    padding: 12px;
+  }
+
+  .messages {
+    padding: 12px;
+
+    gap: 10px;
+  }
+
+  .message {
+    max-width: 92%;
+
+    padding: 9px 11px;
+
+    font-size: 13px;
+  }
+
+  .input-row {
+    gap: 5px;
+  }
+
+  .icon-button,
+  .send-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .input-row > input:not([type]) {
+    height: 38px;
+
+    padding: 0 9px;
+
+    font-size: 13px;
+  }
+
+  .upload-types {
+    justify-content: center;
+  }
+
+  .diagnosis {
+    padding: 15px;
+  }
+
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    padding: 18px;
+
+    border-radius: 12px;
+  }
+}
+
+
+/* =========================
+   VERY SMALL DEVICES
+========================= */
+
+@media (max-width: 360px) {
+  .upload-types {
+    gap: 6px;
+
+    font-size: 9px;
+  }
+
+  .message {
+    max-width: 95%;
+  }
+
+  .input-row > input:not([type]) {
+    min-width: 0;
+  }
+}
