@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os 
 from pathlib import Path 
+import dj_database_url
 
 from dotenv import load_dotenv
 
@@ -90,7 +91,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import dj_database_url
+
 
 # Use Railway's DATABASE_URL in production; fall back to local config for development
 DATABASE_URL = os.getenv("DATABASE_URL")
