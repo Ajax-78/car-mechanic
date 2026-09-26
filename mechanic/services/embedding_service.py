@@ -1,39 +1,27 @@
 import os
-from pathlib import Path
+import logging
+from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-from google import genai
+
+logger = logging.getLogger(__name__)
+
+# Safely load local .env during local development; Railway injects variables directly into system env
+load_dotenv()
+
+EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001")
 
 
-
-# backend/.env
-BASE_DIR = Path(__file__).resolve().parents[2]
-load_dotenv(BASE_DIR / ".env")
-
-
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-print("Embedding service API key loaded:", bool(API_KEY))
-
-if not API_KEY:
-    raise ValueError(
-        f"GEMINI_API_KEY not found. Expected .env at: {BASE_DIR / '.env'}"
-    )
-
-
-client = genai.Client(
-    api_key=API_KEY
-)
-
-
-EMBEDDING_MODEL = os.getenv(
-    "GEMINI_EMBEDDING_MODEL",
-    "gemini-embedding-001"
-)
+def get_genai_client():
+    """Dynamically retrieve client at runtime to prevent top-level import crashes."""
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is missing from environment variables or Railway configuration!")
+    return genai.Client(api_key=api_key)
 
 
 def generate_document_embedding(text, title=""):
-
+    client = get_genai_client()
     content = f"title: {title} | text: {text}"
 
     result = client.models.embed_content(
@@ -49,7 +37,7 @@ def generate_document_embedding(text, title=""):
 
 
 def generate_query_embedding(text):
-
+    client = get_genai_client()
     content = f"task: question answering | query: {text}"
 
     result = client.models.embed_content(
