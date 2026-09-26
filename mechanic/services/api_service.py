@@ -11,12 +11,6 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise ValueError("GEMINI_API_KEY is missing from environment variables or .env file!")
-
-client = genai.Client(api_key=api_key)
-
 # Primary model from env with automated fallback chain
 PRIMARY_MODEL = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
 FALLBACK_MODELS = [PRIMARY_MODEL, "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-flash"]
@@ -29,12 +23,22 @@ You are an expert AI automotive mechanic assistant.
 Your goal is to diagnose vehicle issues, offer clear troubleshooting steps, 
 and provide safety advice. If the problem is dangerous, recommend professional inspection immediately.
 """
+
+def get_genai_client():
+    """Retrieve client dynamically at runtime rather than on module import."""
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is missing from environment variables or Railway configuration!")
+    return genai.Client(api_key=api_key)
+
 def generate_mechanic_response(
     question,
     context,
     conversation_history="",
     max_retries_per_model=2
 ):
+    client = get_genai_client()
+
     prompt = f"""
 RELEVANT MECHANIC KNOWLEDGE:
 --------------------------------
@@ -88,7 +92,6 @@ CURRENT USER QUESTION:
 
     last_exception = None
 
-    # Loop through the list of models
     for model_name in MODELS_TO_TRY:
         delay = 1
         for attempt in range(1, max_retries_per_model + 1):
@@ -99,7 +102,6 @@ CURRENT USER QUESTION:
                     config=config
                 )
 
-                # Extract text from response parts safely
                 response_text = ""
                 if response.candidates and response.candidates[0].content.parts:
                     for part in response.candidates[0].content.parts:
@@ -132,12 +134,10 @@ CURRENT USER QUESTION:
                     time.sleep(delay)
                     delay *= 2
                 else:
-                    # Non-503/429 errors (like bad request or auth) should raise immediately
                     raise e
 
         logger.warning(f"[Gemini API] Model {model_name} failed all retries. Falling back to next model...")
 
-    # If all models in the fallback chain failed
     if last_exception:
         raise last_exception
     raise RuntimeError("All configured Gemini models are currently unavailable.")
